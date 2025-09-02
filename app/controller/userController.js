@@ -36,22 +36,23 @@ class UserController {
   //Activate/Deactivate User (SuperAdmin Only)
 
   async changeStatus(req, res) {
-    const { id } = req.params;
-    const { isActive } = req.body;
+    try {
+      const { id } = req.params;
+      const { isActive } = req.body;
 
-    const user = await User.findById(id);
-    if (!user) return res.status(404).json({ message: "User not found" });
+      const user = await User.findById(id);
+      if (!user) return res.status(404).json({ message: "User not found" });
 
-    user.isActive = isActive;
-    await user.save();
+      user.isActive = isActive;
+      await user.save();
 
-    res.json({
-      message: `User ${isActive ? "activated" : "deactivated"} successfully`,
-      user,
-    });
-  }
-  catch(err) {
-    res.status(500).json({ message: "Server error", error: err.message });
+      res.json({
+        message: `User ${isActive ? "activated" : "deactivated"} successfully`,
+        user,
+      });
+    } catch (err) {
+      res.status(500).json({ message: "Server error", error: err.message });
+    }
   }
 
   // ================== Assign Employee to Manager ==================
